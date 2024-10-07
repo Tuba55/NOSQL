@@ -1,5 +1,8 @@
 Step 1: Setup MongoDB Environment
-inserting the necessary data.
+
+download dataset
+http://media.mongodb.org/zips.json
+save as zips.json
 
 use movie_rental;  // Switch to or create a new database
 db.createCollection("rentals");  // Create a collection called "rentals"
