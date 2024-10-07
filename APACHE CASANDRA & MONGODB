@@ -1,0 +1,268 @@
+use social;
+-----
+db.createCollection("users");
+db.createCollection("posts");
+db.users.insertOne({
+-----
+    user_id: new ObjectId(),
+
+    username: 'john_doe',
+
+    email: 'john@example.com',
+
+    created_at: new Date()
+
+});
+
+
+db.users.insertOne({
+
+    user_id: new ObjectId(),
+
+    username: 'jane_doe',
+
+    email: 'jane@example.com',
+
+    created_at: new Date()
+
+});
+------
+db.users.findOne({ username: 'john_doe' });
+
+-----
+db.users.findOne({ username: 'jane_doe' });
+
+------
+// Inserting posts for John Doe
+
+db.posts.insertOne({
+
+    post_id: new ObjectId(),
+
+    user_id: ObjectId("66fed07edd9a024600924fd0"), // John Doe's ObjectId
+
+    content: 'Hello World!',
+
+    created_at: new Date()
+
+});
+
+
+db.posts.insertOne({
+
+    post_id: new ObjectId(),
+
+    user_id: ObjectId("66fed07edd9a024600924fd0"), // John Doe's ObjectId
+
+    content: 'Cassandra is great!',
+
+    created_at: new Date()
+
+});
+
+
+// Inserting a post for Jane Doe
+
+db.posts.insertOne({
+
+    post_id: new ObjectId(),
+
+    user_id: ObjectId("66fed07edd9a024600924fd2"), // Jane Doe's ObjectId
+
+    content: 'Enjoying the sunny day!',
+
+    created_at: new Date()
+
+});
+------
+db.users.find({});
+
+-----
+db.users.findOne({ username: 'john_doe' });
+
+------
+// Query to find posts for John Doe
+
+db.posts.find({ user_id: ObjectId("66fed07edd9a024600924fd0") });
+
+
+// Query to find posts for Jane Doe
+
+db.posts.find({ user_id: ObjectId("66fed07edd9a024600924fd2") });
+
+-------
+// Query for the post with content 'Hello World!'
+
+db.posts.findOne({ post_id: ObjectId("66fed0e6dd9a024600924fd6") });
+
+
+// Query for the post with content 'Cassandra is great!'
+
+db.posts.findOne({ post_id: ObjectId("66fed0e6dd9a024600924fd8") }); 
+------
+db.posts.countDocuments({});
+-------
+
+
+****Cassandra*****
+----
+use social;
+----
+CREATE TABLE social.users (
+
+    user_id UUID PRIMARY KEY,
+
+    username TEXT,
+
+    email TEXT,
+
+    created_at TIMESTAMP
+
+);
+-----
+
+CREATE TABLE social.posts (
+
+    post_id UUID PRIMARY KEY,
+
+    user_id UUID,
+
+    content TEXT,
+
+    created_at TIMESTAMP
+
+);
+------
+INSERT INTO users (user_id, username, email, created_at) 
+
+VALUES (uuid(), 'john_doe', 'john@example.com', toTimestamp(now()));
+
+
+INSERT INTO users (user_id, username, email, created_at) 
+
+VALUES (uuid(), 'jane_doe', 'jane@example.com', toTimestamp(now()));
+-----
+SELECT user_id FROM users WHERE username = 'john_doe' ALLOW FILTERING;
+----
+SELECT user_id FROM users WHERE username = 'jane_doe' ALLOW FILTERING;
+
+---
+-- Insert posts for John Doe
+
+INSERT INTO social.posts (post_id, user_id, content, created_at) 
+
+VALUES (uuid(), f1cd6185-4a12-4be7-8ec9-536d8ee997ec, 'Hello World!', toTimestamp(now()));
+
+
+INSERT INTO social.posts (post_id, user_id, content, created_at) 
+
+VALUES (uuid(), f1cd6185-4a12-4be7-8ec9-536d8ee997ec, 'Cassandra is great!', toTimestamp(now()));
+
+
+-- Insert a post for Jane Doe
+
+INSERT INTO social.posts (post_id, user_id, content, created_at) 
+
+VALUES (uuid(), d08c9dcd-8ec4-4d80-af99-c386ec7cae1b, 'Enjoying the sunny day!', toTimestamp(now()));
+----
+SELECT * FROM social.users;
+---
+SELECT * FROM social.users WHERE username = 'john_doe' ALLOW FILTERING;
+----
+SELECT * FROM social.posts WHERE user_id = f1cd6185-4a12-4be7-8ec9-536d8ee997ec ALLOW FILTERING;
+
+----
+SELECT * FROM social.posts WHERE user_id = d08c9dcd-8ec4-4d80-af99-c386ec7cae1b ALLOW FILTERING;
+----
+SELECT * FROM social.posts WHERE post_id = 530265c1-8171-4eb9-8ccb-383411fc2737 ALLOW FILTERING;
+
+-----
+SELECT COUNT(*) FROM social.posts ALLOW FILTERING;
+-----
+
+****Difference Between MongoDB and Cassandra: Illustrated with Social Media Data****
+
+// User document in MongoDB (collection "users")
+
+{
+
+    "_id": ObjectId("..."),
+
+    "username": "john_doe",
+
+    "email": "john@example.com",
+
+    "created_at": new Date()
+
+}
+
+
+// Post document in MongoDB (collection "posts")
+
+{
+
+    "post_id": ObjectId("..."),
+
+    "user_id": ObjectId("..."),
+
+    "content": "Hello World!",
+
+    "created_at": new Date()
+
+}
+----
+// Users table in Cassandra
+
+CREATE TABLE social.users (
+
+    user_id UUID PRIMARY KEY,
+
+    username TEXT,
+
+    email TEXT,
+
+    created_at TIMESTAMP
+
+);
+
+
+// Posts table in Cassandra
+
+CREATE TABLE social.posts (
+
+    post_id UUID PRIMARY KEY,
+
+    user_id UUID,
+
+    content TEXT,
+
+    created_at TIMESTAMP
+
+);
+
+----
+// Query for user by username
+
+db.users.findOne({ username: 'john_doe' });
+
+
+// Query all posts made by john_doe
+
+db.posts.find({ user_id: ObjectId("john_doe_user_id") });
+
+
+----
+// Query user by username (note the use of "ALLOW FILTERING" to bypass index limitations)
+
+SELECT * FROM users WHERE username = 'john_doe' ALLOW FILTERING;
+
+
+// Query posts by user_id
+
+SELECT * FROM posts WHERE user_id = f1cd6185-4a12-4be7-8ec9-536d8ee997ec ALLOW FILTERING;
+
+
+
+
+
+
