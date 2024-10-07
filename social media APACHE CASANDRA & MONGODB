@@ -1,107 +1,68 @@
 use social;
 
+-creating collections
+
 db.createCollection("users");
 db.createCollection("posts");
 db.users.insertOne({
------
-    user_id: new ObjectId(),
 
+-inserting users
+    user_id: new ObjectId(),
     username: 'john_doe',
-
     email: 'john@example.com',
-
     created_at: new Date()
-
 });
-
-
 db.users.insertOne({
-
     user_id: new ObjectId(),
-
     username: 'jane_doe',
-
     email: 'jane@example.com',
-
     created_at: new Date()
-
 });
-------
+-querying by username
 db.users.findOne({ username: 'john_doe' });
-
------
 db.users.findOne({ username: 'jane_doe' });
 
-------
-// Inserting posts for John Doe
-
+-inserting posts
 db.posts.insertOne({
-
     post_id: new ObjectId(),
-
     user_id: ObjectId("66fed07edd9a024600924fd0"), // John Doe's ObjectId
-
     content: 'Hello World!',
-
     created_at: new Date()
-
 });
-
-
 db.posts.insertOne({
-
     post_id: new ObjectId(),
-
     user_id: ObjectId("66fed07edd9a024600924fd0"), // John Doe's ObjectId
-
     content: 'Cassandra is great!',
-
     created_at: new Date()
-
 });
-
 
 // Inserting a post for Jane Doe
 
 db.posts.insertOne({
-
     post_id: new ObjectId(),
-
     user_id: ObjectId("66fed07edd9a024600924fd2"), // Jane Doe's ObjectId
-
     content: 'Enjoying the sunny day!',
-
     created_at: new Date()
-
 });
-------
-db.users.find({});
 
------
+-Querying all users
+
+db.users.find({});
 db.users.findOne({ username: 'john_doe' });
 
-------
 // Query to find posts for John Doe
-
 db.posts.find({ user_id: ObjectId("66fed07edd9a024600924fd0") });
 
-
 // Query to find posts for Jane Doe
-
 db.posts.find({ user_id: ObjectId("66fed07edd9a024600924fd2") });
 
--------
 // Query for the post with content 'Hello World!'
-
 db.posts.findOne({ post_id: ObjectId("66fed0e6dd9a024600924fd6") });
 
 
 // Query for the post with content 'Cassandra is great!'
-
 db.posts.findOne({ post_id: ObjectId("66fed0e6dd9a024600924fd8") }); 
-------
 db.posts.countDocuments({});
--------
 
 
 ****Cassandra*****
@@ -114,7 +75,6 @@ CREATE TABLE social.users (
     email TEXT,
     created_at TIMESTAMP
 );
-
 CREATE TABLE social.posts (
     post_id UUID PRIMARY KEY,
     user_id UUID,
@@ -173,7 +133,6 @@ SELECT COUNT(*) FROM social.posts ALLOW FILTERING;
     "created_at": new Date()
 }
 
-----
 // Users table in Cassandra
 CREATE TABLE social.users (
     user_id UUID PRIMARY KEY,
