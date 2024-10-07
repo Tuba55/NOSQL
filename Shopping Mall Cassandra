@@ -1,3 +1,5 @@
+DataStax Astra Team
+
 USE car;
 --
 CREATE TABLE customers (
