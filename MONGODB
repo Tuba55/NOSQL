@@ -1,0 +1,35 @@
+Download the Dataset
+http://media.mongodb.org/zips.json
+
+use practical2
+
+-----Find states with the city called "BOSTON"
+db.zips.aggregate([
+
+    { $match: { city: "BOSTON" } },
+
+    { $group: { _id: "$state", cities: { $addToSet: "$city" } } }
+
+]);
+----Find states and cities whose names include the string "BOST"
+db.zips.aggregate([
+
+    { $match: { city: { $regex: /BOST/i } } },
+
+    { $group: { _id: { state: "$state", city: "$city" } } }
+
+]);
+----Find the city in each state with the most number of zip codes and rank those cities along with the states using the city populations. Mongo DB can query on spatial information.
+db.zips.aggregate([
+
+    { $group: { _id: { state: "$state", city: "$city" }, count: { $sum: 1 }, population: { $first: "$pop" } } },
+
+    { $sort: { count: -1 } },
+
+    { $group: { _id: "$_id.state", city: { $first: "$_id.city" }, count: { $first: "$count" }, population: { $first: "$population" } } },
+
+    { $sort: { population: -1 } }
+
+]);
+
+
