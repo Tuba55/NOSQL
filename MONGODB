@@ -1,5 +1,11 @@
-Download the Dataset
+download dataset
 http://media.mongodb.org/zips.json
+save as zips.json
+
+create connection
+create database
+import data
+use mongodbshell
 
 use practical2
 
