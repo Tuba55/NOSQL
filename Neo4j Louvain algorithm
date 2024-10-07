@@ -1,8 +1,10 @@
-Install GDS Library Plugin 
-B) Python
-1) Establish the connection properly:
-by default username and localhost will be the same as code
-password will be what you have saved
+create database in neo4j and start it
+ broweser:
+http://localhost:7474
+
+pip install neo4j
+pip install graphdatascience
+
 
 code :
 
